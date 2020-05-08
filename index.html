@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+      integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs="
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="main.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- NAV -->
+    <div class="nav-container">
+      <div class="nav-toggle nav-item" id="nav-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="nav-item">
+        <p class="logo">
+          Beautiful Chairs
+        </p>
+      </div>
+      <div class="cart-icon nav-item" id="cart-icon">
+        <span class="num-items-in-cart" id="num-items-in-cart">0</span>
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+    </div>
+    <div class="ham-menu" id="ham-menu">
+      <ul>
+        <a href="#gallery"><li>View Gallery</li></a>
+        <li id="checkout">Checkout</li>
+        <a href=""><li>Contact</li></a>
+      </ul>
+    </div>
+    <!-- NAV END -->
+
+    <!-- SHOWCASE -->
+    <div>
+      <div class="showcase-container">
+        <div class="showcase">
+          <link rel="stylesheet" href="" />
+          <a href="#gallery">
+            <h2>
+              Shop Now
+            </h2>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- SHOWCASE END -->
+
+    <!-- CART -->
+    <div class="cart-container" id="cart-container">
+      <div class="close-cart" id="close-cart-btn">
+        <i class="close-cart fas fa-times"></i>
+      </div>
+      <div class="cart-items" id="cart-items"></div>
+      <div class="cart-total">
+        <h2>
+          Total
+          <span class="cart-total-price" id="cart-total-price">$0.00</span>
+        </h2>
+      </div>
+      <div class="cart-btns-big">
+        <div class="clear-cart-btn" id="clear-btn">
+          <span><i class="fas fa-trash"></i></span> Clear Cart
+        </div>
+        <div class="checkout-cart-btn" id="checkout-cart-btn">
+          <span><i class="fas fa-check" id="checkout-btn"></i></span> Checkout
+        </div>
+      </div>
+    </div>
+
+    <!-- CART END -->
+
+    <!-- GALLERY -->
+    <div class="gallery" id="gallery">
+      <div class="gallery-header">
+        Gallery
+      </div>
+      <div class="gallery-container" id="gallery-container"></div>
+    </div>
+
+    <!-- GALLERY END -->
+    <!-- FOOTER -->
+
+    <div class="footer">
+      <p>&copy erictarter2020</p>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
