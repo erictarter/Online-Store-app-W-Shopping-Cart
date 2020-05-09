@@ -370,6 +370,22 @@ body a {
   text-align: center;
 }
 
+/* END */
+.end-app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #e98074;
+  z-index: 20;
+  text-align: center;
+  padding-top: 12rem;
+  font-size: 2rem;
+  color: #fff;
+  display: none;
+}
+
 @keyframes slideIn {
   from {
     transform: translateX(120%);

@@ -524,8 +524,13 @@ final.addEventListener('click', () => {
 });
 
 finalCheckout.addEventListener('click', () => {
-  location.reload();
-  localStorage.clear();
+  document.getElementById('end-app').style.display = 'block';
+  cartContainer.style.display = 'none';
+  galleryContainer.style.display = 'none';
+  setTimeout(() => {
+    location.reload();
+    localStorage.clear();
+  }, 2000);
 });
 
 // MAKE NAV BIGGER ON MOBILE
