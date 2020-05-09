@@ -525,7 +525,7 @@ final.addEventListener('click', () => {
 
 finalCheckout.addEventListener('click', () => {
   document.getElementById('end-app').style.display = 'block';
-  cartContainer.style.display = 'none';
+  cartContainer.style.width = '100%';
   galleryContainer.style.display = 'none';
   setTimeout(() => {
     location.reload();

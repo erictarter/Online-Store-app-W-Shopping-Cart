@@ -372,13 +372,10 @@ body a {
 
 /* END */
 .end-app {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: #e98074;
-  z-index: 20;
+  z-index: 1;
   text-align: center;
   padding-top: 12rem;
   font-size: 2rem;
