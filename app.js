@@ -4,6 +4,8 @@ const cartIcon = document.getElementById('cart-icon');
 const navToggle = document.getElementById('nav-toggle');
 const checkout = document.getElementById('checkout');
 const clearBtn = document.getElementById('clear-btn');
+const finalClear = document.getElementById('final-clear');
+const finalCheckout = document.getElementById('final-checkout');
 
 // IMAGE
 
@@ -69,6 +71,22 @@ async function getGalleryData() {
 
 function clearCart(data, btns) {
   clearBtn.addEventListener('click', () => {
+    data.map(item => {
+      localStorage.removeItem(item.title);
+      document.getElementById('cart-items').innerHTML = '';
+      document.getElementById('cart-total-price').innerHTML = '$0.00';
+      numItemsInCart.innerText = 0;
+      cartTotalGlobal = 0;
+      cartGlobal = [];
+      changeCartItems = 0;
+      changeCartTotal = 0;
+      btns.map(btn => {
+        btn.disabled = false;
+        btn.innerText = 'Add to Cart';
+      });
+    });
+  });
+  finalClear.addEventListener('click', () => {
     data.map(item => {
       localStorage.removeItem(item.title);
       document.getElementById('cart-items').innerHTML = '';
@@ -458,25 +476,58 @@ navToggle.addEventListener('click', () => {
   }
 });
 
+// CHECKOUT BTN
+
 final = document.getElementById('checkout-cart-btn');
 
 final.addEventListener('click', () => {
   if (parseInt(numItemsInCart.innerText) > 0) {
+    addToCartBtns = [...document.querySelectorAll('.add-to-cart')];
+    addToCartBtns.map(btn => {
+      btn.disabled = true;
+    });
+    let downBtns = [...document.querySelectorAll('.fa-chevron-down')];
+    downBtns.map(i => {
+      i.style.display = 'none';
+    });
+    let upBtns = [...document.querySelectorAll('.fa-chevron-up')];
+    upBtns.map(i => {
+      i.style.display = 'none';
+    });
+
+    letRemoves = [...document.querySelectorAll('.remove-item')];
+    letRemoves.map(remove => {
+      console.log(remove);
+      remove.style.display = 'none';
+    });
+
+    final.style.display = 'none';
     clearBtn.style.display = 'none';
-    final.classList.add('final');
-    final.addEventListener('click', () => {
-      location.reload();
-      localStorage.clear();
+    finalCheckout.style.display = 'block';
+    finalClear.style.display = 'block';
+
+    finalClear.addEventListener('click', () => {
+      addToCartBtns.map(btn => {
+        btn.disabled = false;
+      });
+      finalClear.style.display = 'none';
+      finalCheckout.style.display = 'none';
+      final.style.display = 'block';
+      clearBtn.style.display = 'block';
     });
   } else {
-    alert('No Items In Cart');
+    document.getElementById('no-items-popup').classList.add('display');
+    setTimeout(() => {
+      document.getElementById('no-items-popup').classList.remove('display');
+    }, 2000);
   }
 });
 
-// POP UP FOR NO ITEMS IN CART
-// CONFIRMATION CHANGE
+finalCheckout.addEventListener('click', () => {
+  location.reload();
+  localStorage.clear();
+});
+
 // MAKE NAV BIGGER ON MOBILE
 // SHOW CASE NOT CENTERED MOBILE
-//  ADD CLICK FUNCTION FOR HAM NAV
 // MESS WITH CART POSITION FOR MOBILE --- fixed or absolute
-// CART TOTAL ISNT CORRECT AFTER RELOAD AND ITEM IS ADD --- DISPLAYED CORRECTLY BUT THE AMOUNT ISNT CORRECT WHEN YOU REMOVE A NEW ADDED ITEM
