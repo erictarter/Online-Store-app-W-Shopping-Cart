@@ -22,6 +22,11 @@ let cartTotalPrice = document.getElementById('cart-total-price');
 let cartTotalGlobal = 0;
 let cartGlobal = [];
 let numberCartItems = cartGlobal.length;
+let changeCartItems = 0;
+let changeCartTotal = 0;
+let numItemsRemoved = 0;
+let accumeRemoved = 0;
+let totalToRemove = 0;
 
 getGalleryData();
 
@@ -69,7 +74,10 @@ function clearCart(data, btns) {
       document.getElementById('cart-items').innerHTML = '';
       document.getElementById('cart-total-price').innerHTML = '$0.00';
       numItemsInCart.innerText = 0;
-
+      cartTotalGlobal = 0;
+      cartGlobal = [];
+      changeCartItems = 0;
+      changeCartTotal = 0;
       btns.map(btn => {
         btn.disabled = false;
         btn.innerText = 'Add to Cart';
@@ -164,9 +172,10 @@ function displayItemsInCart(cart, btns) {
               if (amount.id === e.target.id) {
                 let removeAmount =
                   parseInt(amount.innerText) * parseFloat(item.price);
-
+                console.log(cartTotalGlobal);
                 cartTotalGlobal -= removeAmount;
-                cartTotalPrice.innerText = '$' + cartTotalGlobal.toFixed(2);
+                cartTotalPrice.innerText =
+                  '$' + Math.abs(cartTotalGlobal.toFixed(2));
               }
             });
           }
@@ -199,6 +208,7 @@ function displayItemsInCart(cart, btns) {
           ) {
             // SET AMOUNTS TO LOCAL STORAGE / DISPLAYED ON RELOAD
             cartTotalGlobal += item.price;
+            console.log(cartTotalGlobal);
             document.getElementById(
               'cart-total-price'
             ).innerHTML = cartTotalGlobal.toFixed(2);
@@ -261,24 +271,21 @@ closeCartBtn.addEventListener('click', () => {
 // CART DOM FUNTIONALITY
 
 function showItemsInCart(data, btns) {
-  let changeCartItems = 0;
-  let changeCartTotal = 0;
-  let numItemsRemoved = 0;
-
   btns.map(btn =>
     btn.addEventListener('click', e => {
       e.target.disabled = true;
       e.target.innerHTML = `<i class='fas fa-check'></i> In Cart`;
       changeCartItems += 1;
       numItemsInCart.innerText = parseInt(numItemsInCart.innerText) + 1;
-
       clearBtn.addEventListener('click', () => {
         changeCartItems = 0;
       });
 
       data.map(item => {
         if (item.id === e.target.id) {
+          // WHAT IS CART TOTAL AT THIS PONT?
           changeCartTotal += item.price;
+          totalToRemove = cartTotalGlobal + changeCartTotal;
           cartTotalPrice.innerText =
             '$' + (cartTotalGlobal + changeCartTotal).toFixed(2);
           cartItems.innerHTML += `
@@ -316,13 +323,23 @@ function showItemsInCart(data, btns) {
                   localStorage.removeItem(item.title);
 
                   amountNum.map(amount => {
-                    if (amount.id === e.target.id) {
+                    if (amount.id === e.target.id && cartTotalGlobal === 0) {
                       let removeAmount =
                         parseInt(amount.innerText) * parseFloat(item.price);
 
                       changeCartTotal -= removeAmount;
                       cartTotalPrice.innerText =
-                        '$' + changeCartTotal.toFixed(2);
+                        '$' + Math.abs(changeCartTotal.toFixed(2));
+                    }
+                    if (amount.id === e.target.id && cartTotalGlobal > 0) {
+                      let removeAmount =
+                        parseInt(amount.innerText) * parseFloat(item.price);
+                      totalToRemove -= removeAmount;
+                      changeCartTotal -= removeAmount;
+                      //   let display = cartTotalPrice.innerHTML;
+                      console.log(totalToRemove);
+                      cartTotalPrice.innerText =
+                        '$' + Math.abs(totalToRemove.toFixed(2));
                     }
                   });
                 }
@@ -350,12 +367,30 @@ function showItemsInCart(data, btns) {
 
                 if (
                   e.target.id === `up-${item.id}` &&
-                  parseInt(amount.innerText) <= 9
+                  parseInt(amount.innerText) <= 9 &&
+                  cartTotalGlobal === 0
                 ) {
                   changeCartTotal += item.price;
                   document.getElementById(
                     'cart-total-price'
-                  ).innerHTML = changeCartTotal.toFixed(2);
+                  ).innerHTML = Math.abs(changeCartTotal.toFixed(2));
+                  let itemTarget = JSON.parse(localStorage.getItem(item.title));
+                  itemTarget.amount += 1;
+                  localStorage.setItem(item.title, JSON.stringify(itemTarget));
+                  amount.innerText = itemTarget.amount;
+                }
+
+                if (
+                  e.target.id === `up-${item.id}` &&
+                  parseInt(amount.innerText) <= 9 &&
+                  cartTotalGlobal > 0
+                ) {
+                  changeCartTotal += item.price;
+                  totalToRemove += item.price;
+                  let display = changeCartTotal + cartTotalGlobal;
+                  document.getElementById(
+                    'cart-total-price'
+                  ).innerHTML = Math.abs(display.toFixed(2));
                   let itemTarget = JSON.parse(localStorage.getItem(item.title));
                   itemTarget.amount += 1;
                   localStorage.setItem(item.title, JSON.stringify(itemTarget));
@@ -364,12 +399,30 @@ function showItemsInCart(data, btns) {
 
                 if (
                   e.target.id === `down-${item.id}` &&
-                  parseInt(amount.innerText) > 0
+                  parseInt(amount.innerText) > 0 &&
+                  cartTotalGlobal === 0
                 ) {
                   changeCartTotal -= item.price;
+                  let display = changeCartTotal + cartTotalGlobal;
                   document.getElementById(
                     'cart-total-price'
-                  ).innerHTML = changeCartTotal.toFixed(2);
+                  ).innerHTML = Math.abs(display.toFixed(2));
+                  let itemTarget = JSON.parse(localStorage.getItem(item.title));
+                  itemTarget.amount -= 1;
+                  localStorage.setItem(item.title, JSON.stringify(itemTarget));
+                  amount.innerText = itemTarget.amount;
+                }
+                if (
+                  e.target.id === `down-${item.id}` &&
+                  parseInt(amount.innerText) > 0 &&
+                  cartTotalGlobal > 0
+                ) {
+                  changeCartTotal -= item.price;
+                  totalToRemove -= item.price;
+                  let display = changeCartTotal + cartTotalGlobal;
+                  document.getElementById(
+                    'cart-total-price'
+                  ).innerHTML = Math.abs(display.toFixed(2));
                   let itemTarget = JSON.parse(localStorage.getItem(item.title));
                   itemTarget.amount -= 1;
                   localStorage.setItem(item.title, JSON.stringify(itemTarget));
@@ -421,3 +474,9 @@ final.addEventListener('click', () => {
 });
 
 // POP UP FOR NO ITEMS IN CART
+// CONFIRMATION CHANGE
+// MAKE NAV BIGGER ON MOBILE
+// SHOW CASE NOT CENTERED MOBILE
+//  ADD CLICK FUNCTION FOR HAM NAV
+// MESS WITH CART POSITION FOR MOBILE --- fixed or absolute
+// CART TOTAL ISNT CORRECT AFTER RELOAD AND ITEM IS ADD --- DISPLAYED CORRECTLY BUT THE AMOUNT ISNT CORRECT WHEN YOU REMOVE A NEW ADDED ITEM
